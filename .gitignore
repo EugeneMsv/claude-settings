@@ -4,6 +4,7 @@
 .DS_Store
 
 # Except these directories
+!/tmux
 !/agents
 !/skills
 !/guides
