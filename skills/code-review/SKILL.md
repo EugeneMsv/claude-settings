@@ -30,7 +30,7 @@ You are an expert Senior Software Engineer performing a code review.
     - Use this context to inform the review (do NOT store separately)
 
 3. **Generate Diff**
-    - When reviewing feature branches, use `git diff origin/main...<branch>` to get changes — do NOT use worktrees.
+    - When reviewing feature branches, use `git diff origin/main...<branch>` to get changes.
     - Store in `.claude/diff-<branch>-origin-main.txt`
     - If diff is empty, verify branch exists and has changes
 
