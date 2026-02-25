@@ -10,7 +10,7 @@
 - Prefer using `Edit` over `Write`
 - Use `mcp__sequentialthinking__sequentialthinking` to plan complex tasks
 - Use `mcp__context7__resolve-library-id` and `mcp__context7__get-library-docs` before generating/changing any code
-- When using git CLI, use `--no-pager` flag for clean output
+- When using git CLI, use `git --no-pager <subcommand>` for clean output (global flag goes BEFORE subcommand, e.g. `git --no-pager log`)
 - **Prefer simple commands over pipes**: When a single command accomplishes the goal, use it instead of piped alternatives. Example:
   prefer `git log -n 5 --stat` over `git log --format=%H -n 5 | xargs -I {} git show {} --stat`. Simpler commands are clearer, less
   error-prone, and may avoid unnecessary permission prompts.

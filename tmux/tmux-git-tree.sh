@@ -17,6 +17,7 @@ DIM_RED='\033[31m'
 RESET='\033[0m'
 BOLD='\033[1m'
 DIM='\033[2m'
+CYAN='\033[1;96m'
 
 # Build tab-separated change list: path TAB status_char TAB source
 # Staged entries come first so awk keeps them on deduplication
@@ -171,3 +172,65 @@ git -C "$p" log --no-decorate -n 10 \
       line=" $date  $short  $msg"
       printf "${DIM}%s${RESET}\n" "${line:0:$cols}"
     done
+
+# AI Contribution
+repo_root=$(git -C "$p" rev-parse --show-toplevel 2>/dev/null)
+branch_sanitized=$(printf '%s' "$branch" | tr '/\\' '-')
+ai_file="$repo_root/.claude/ai-tracking-${branch_sanitized}.json"
+
+if [[ -f "$ai_file" ]]; then
+  ai_data=$(awk '
+    /^    "ai":/      { in_ai=1; in_hu=0 }
+    /^    "human":/   { in_ai=0; in_hu=1 }
+    /^      "total":/   { sect="total" }
+    /^      "added":/   { sect="added" }
+    /^      "removed":/ { sect="removed" }
+    /^        "lines":/ {
+      val=$0; gsub(/^[^:]*: /,"",val); gsub(/,?[ \t]*$/,"",val)
+      if(in_ai && sect=="total")   ai_tl=val
+      if(in_ai && sect=="added")   ai_al=val
+      if(in_ai && sect=="removed") ai_rl=val
+      if(in_hu && sect=="total")   hu_tl=val
+      if(in_hu && sect=="added")   hu_al=val
+      if(in_hu && sect=="removed") hu_rl=val
+    }
+    /^        "percentage":/ {
+      val=$0; gsub(/^[^:]*: /,"",val); gsub(/,?[ \t]*$/,"",val)
+      if(in_ai && sect=="total") ai_tp=val
+      if(in_hu && sect=="total") hu_tp=val
+    }
+    END { printf "%s|%s|%s|%s|%s|%s|%s|%s\n", ai_tl,ai_tp,hu_tl,hu_tp,ai_al,ai_rl,hu_al,hu_rl }
+  ' "$ai_file")
+
+  if [[ -n "$ai_data" && "$ai_data" != "|||||||" ]]; then
+    IFS='|' read -r ai_lines ai_pct hu_lines hu_pct ai_added ai_removed hu_added hu_removed <<< "$ai_data"
+
+    # Single split bar: cyan (AI) left, yellow (Human) right
+    bar_width=28
+    ai_w=$(( (${ai_pct%.*} * bar_width + 50) / 100 ))
+    [[ $ai_w -gt $bar_width ]] && ai_w=$bar_width
+    [[ $ai_w -lt 0 ]] && ai_w=0
+    ai_seg=""; hu_seg=""
+    for (( i=0;    i<ai_w;      i++ )); do ai_seg+="▓"; done
+    for (( i=ai_w; i<bar_width; i++ )); do hu_seg+="▓"; done
+
+    # Strings for each column (no ANSI — used for length measurement)
+    ai_pct_str=$(printf "%.1f%%" "$ai_pct")
+    hu_pct_str=$(printf "%.1f%%" "$hu_pct")
+    ai_stat_str=$(printf "%d: +%d -%d" "$ai_lines" "$ai_added" "$ai_removed")
+    hu_stat_str=$(printf "%d: +%d -%d" "$hu_lines" "$hu_added" "$hu_removed")
+
+    # | separator always at bar centre: 1(space) + 1([) + bar_width/2
+    lw=$(( bar_width / 2 + 1 ))
+
+    p1=$(( lw - 2 ));           [[ $p1 -lt 0 ]] && p1=0   # pad after "AI"
+    p2=$(( lw - ${#ai_pct_str} )); [[ $p2 -lt 0 ]] && p2=0
+    p4=$(( lw - ${#ai_stat_str} )); [[ $p4 -lt 0 ]] && p4=0
+
+    printf "${DIM}%s${RESET}\n" "$divider"
+    printf " ${CYAN}${BOLD}AI${RESET}%*s|${YELLOW}${BOLD}    Human${RESET}\n"        "$p1" ""
+    printf " ${CYAN}%s${RESET}%*s|${YELLOW}    %s${RESET}\n"  "$ai_pct_str"  "$p2" "" "$hu_pct_str"
+    printf " [${CYAN}%s${RESET}${YELLOW}%s${RESET}]\n"        "$ai_seg" "$hu_seg"
+    printf "${DIM} %s%*s| %s${RESET}\n"                       "$ai_stat_str" "$p4" "" "$hu_stat_str"
+  fi
+fi

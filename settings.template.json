@@ -1,5 +1,15 @@
 {
+  "attribution": {
+    "commit": "",
+    "pr": ""
+  },
   "awsCredentialExport": "<command-to-export-aws-credentials>",
+  "enabledPlugins": {
+    "ai-contribution-tracker@eug-msv-claude-marketplace": false,
+    "commit-commands@claude-plugins-official": true,
+    "kotlin-lsp@claude-plugins-official": true,
+    "plugin-dev@claude-plugins-official": true
+  },
   "env": {
     "ANTHROPIC_DEFAULT_HAIKU_MODEL": "arn:aws:bedrock:us-east-1:<your-aws-account-id>:inference-profile/global.anthropic.claude-haiku-4-5-20251001-v1:0",
     "ANTHROPIC_DEFAULT_OPUS_MODEL": "arn:aws:bedrock:us-east-1:<your-aws-account-id>:inference-profile/global.anthropic.claude-opus-4-6-v1",
@@ -18,10 +28,52 @@
     "OTEL_METRICS_EXPORTER": "otlp",
     "OTEL_METRIC_EXPORT_INTERVAL": "10000"
   },
-  "attribution": {
-    "commit": "",
-    "pr": ""
+  "hooks": {
+    "PostToolUseFailure": [
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash ~/.claude/hooks/fail-detector/fail-captor.sh"
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "hooks": [
+          {
+            "command": "bash ~/.claude/hooks/plan-sync/copy-plan-on-change.sh",
+            "timeout": 10,
+            "type": "command"
+          }
+        ],
+        "matcher": "Write"
+      },
+      {
+        "hooks": [
+          {
+            "command": "bash ~/.claude/hooks/plan-sync/copy-plan-on-change.sh",
+            "timeout": 10,
+            "type": "command"
+          }
+        ],
+        "matcher": "Edit"
+      },
+      {
+        "hooks": [
+          {
+            "command": "bash ~/.claude/hooks/plan-sync/copy-plan-on-exit.sh",
+            "timeout": 10,
+            "type": "command"
+          }
+        ],
+        "matcher": "ExitPlanMode"
+      }
+    ]
   },
+  "model": "opus",
   "permissions": {
     "allow": [
       "mcp__sequentialthinking__*",
@@ -76,6 +128,24 @@
       "Write(**/.claude/**)",
       "Write(**/.git/**)"
     ],
+    "ask": [
+      "Bash(git * add *)",
+      "Bash(git * commit *)",
+      "Bash(git * push *)",
+      "Bash(rm *)",
+      "Bash(git * merge *)",
+      "Bash(git * rebase *)",
+      "Bash(curl*)",
+      "Bash(glab mr note *)",
+      "Bash(glab mr create *)",
+      "Bash(glab mr approve *)",
+      "Bash(glab mr revoke *)",
+      "Bash(glab mr reopen *)",
+      "Bash(glab mr rebase *)",
+      "Bash(glab mr update *)",
+      "Bash(glab mr for *)"
+    ],
+    "defaultMode": "default",
     "deny": [
       "mcp__confluence__confluence_delete_page",
       "Read(**/secrets/**)",
@@ -108,70 +178,11 @@
       "Bash(glab mr close *)",
       "Bash(glab mr delete *)"
     ],
-    "ask": [
-      "Bash(git * add *)",
-      "Bash(git * commit *)",
-      "Bash(git * push *)",
-      "Bash(rm *)",
-      "Bash(git * merge *)",
-      "Bash(git * rebase *)",
-      "Bash(curl*)",
-      "Bash(glab mr note *)",
-      "Bash(glab mr create *)",
-      "Bash(glab mr approve *)",
-      "Bash(glab mr revoke *)",
-      "Bash(glab mr reopen *)",
-      "Bash(glab mr rebase *)",
-      "Bash(glab mr update *)",
-      "Bash(glab mr for *)"
-    ],
-    "defaultMode": "default",
     "disableBypassPermissionsMode": "disable"
-  },
-  "model": "sonnet",
-  "hooks": {
-    "PostToolUse": [
-      {
-        "matcher": "Write",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "bash ~/.claude/hooks/plan-sync/copy-plan-on-change.sh",
-            "timeout": 10
-          }
-        ]
-      },
-      {
-        "matcher": "Edit",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "bash ~/.claude/hooks/plan-sync/copy-plan-on-change.sh",
-            "timeout": 10
-          }
-        ]
-      },
-      {
-        "matcher": "ExitPlanMode",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "bash ~/.claude/hooks/plan-sync/copy-plan-on-exit.sh",
-            "timeout": 10
-          }
-        ]
-      }
-    ]
   },
   "statusLine": {
     "type": "command",
     "command": "<your-statusline-command>",
     "padding": 0
-  },
-  "enabledPlugins": {
-    "commit-commands@claude-plugins-official": true,
-    "kotlin-lsp@claude-plugins-official": true,
-    "plugin-dev@claude-plugins-official": true,
-    "ai-contribution-tracker@eug-msv-claude-marketplace": false
   }
 }
