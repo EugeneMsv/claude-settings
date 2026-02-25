@@ -1,6 +1,6 @@
 ---
 name: tool-rules-refiner
-description: This skill should be used when the user asks to "analyze tool failures", "learn from fail log", "improve tool rules", "update tools memory", "refine tool guidelines", "scan detection log", "extract tool learnings", or wants to derive rules from ~/.claude/fail-detector/detection.jsonl into guides/Tools.md. Analyzes recurring failure patterns and proposes token-efficient one-liner rules grouped by tool and sub-command.
+description: This skill should be used when the user asks to "analyze tool failures", "learn from fail log", "improve tool rules", "update tools memory", "refine tool guidelines", "scan detection log", "extract tool learnings", or wants to derive rules from ~/.claude/fail-detector/tools-fails.jsonl into guides/Tools.md. Analyzes recurring failure patterns and proposes token-efficient one-liner rules grouped by tool and sub-command.
 allowed-tools: Read, Grep, Glob, Bash
 ---
 
@@ -8,7 +8,7 @@ allowed-tools: Read, Grep, Glob, Bash
 
 ## Purpose
 
-Analyze `~/.claude/fail-detector/detection.jsonl` to extract failure patterns and propose structured rule additions or improvements to `~/.claude/guides/Tools.md`. Rules are one-liners grouped by tool and sub-command. Cross-references existing memory to avoid duplicates, conflicts, and redundancies.
+Analyze `~/.claude/fail-detector/tools-fails.jsonl` to extract failure patterns and propose structured rule additions or improvements to `~/.claude/guides/Tools.md`. Rules are one-liners grouped by tool and sub-command. Cross-references existing memory to avoid duplicates, conflicts, and redundancies.
 
 ## Target File
 
@@ -19,7 +19,7 @@ All output goes to `~/.claude/guides/Tools.md`. Never scatter rules into `CLAUDE
 ### Phase 1: Parse Failures
 
 ```bash
-jq -r '[.tool, .command, .error] | @tsv' ~/.claude/fail-detector/detection.jsonl | sort
+jq -r '[.tool, .command, .error] | @tsv' ~/.claude/fail-detector/tools-fails.jsonl | sort
 ```
 
 Group entries by:
@@ -33,6 +33,7 @@ Count occurrences per error pattern. Failures appearing 2+ times are high-priori
 Read all memory files to cross-reference:
 - `~/.claude/guides/Tools.md` — primary target
 - `~/.claude/guides/Workflows.md` — git/workflow rules may already live here
+- `~/.claude/CLAUDE.md` — global
 - `~/.claude/CLAUDE.local.md` — global overrides
 - `~/.claude/guides/Coding.md` — coding patterns
 - `~/.claude/guides/*` — all other guides 

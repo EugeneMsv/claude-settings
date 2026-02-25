@@ -26,3 +26,8 @@
 - Run independent tools in parallel when possible
 - Use sequential execution when tools depend on previous results
 - Never use placeholders or guess missing parameters
+
+## Bash
+
+### gh / glab
+- NEVER use `gh` on GitLab repos — use `glab` instead (`glab mr create`, `glab mr list`, etc.)

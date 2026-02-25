@@ -35,7 +35,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "bash ~/.claude/hooks/fail-detector/fail-captor.sh"
+            "command": "bash ~/.claude/hooks/fail-detector/fail-detector.sh"
           }
         ]
       }
