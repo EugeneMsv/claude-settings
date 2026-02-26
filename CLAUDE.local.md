@@ -20,6 +20,7 @@ ALWAYS MUST:
 1. Analyze request using `mcp__sequentialthinking__sequentialthinking` tool
 2. Generate TODO list with `TaskCreate` tool:
     - Create specific, actionable tasks
+    - Task subjects MUST always be numbered: "Task 1: ...", "Task 2: ..."
 3. Present TODO list for approval using `TaskList`
 
 ### Phase 2: Execution (Required phase)

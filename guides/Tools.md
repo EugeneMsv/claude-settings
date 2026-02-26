@@ -29,5 +29,12 @@
 
 ## Bash
 
+### Git
+- NEVER retry git push after non-fast-forward rejection — run `git pull --rebase` first, then push
+- NEVER run `git pull --rebase` with unstaged changes present — stash first, rebase, then stash pop
+
 ### gh / glab
 - NEVER use `gh` on GitLab repos — use `glab` instead (`glab mr create`, `glab mr list`, etc.)
+
+## Read
+- NEVER Read files >256KB without offset+limit params — use Grep to search or read specific portions

@@ -9,10 +9,14 @@ Always MUST:
 - Only commit files relevant/changed to current task
 - Use format: Task N: <description>
 - Never combine multiple tasks in one commit
+- NEVER chain git operations — run each command independently and verify result before proceeding (includes `add && commit`, `commit && push`, `stash && pull && pop && push`)
 - Git worktrees MUST NEVER be created in `.claude` - they MUST ALWAYS be created one folder above the current directory
   When creating worktrees for code review, use pattern: `../{repository-name}-{purpose}-{git-ref-or-branch-name}`
   Example: `git worktree add ../my-repo-review-story-PROJ-16360 origin/story/PROJ-16360`
 
+
+## Local Infrastructure
+When local dev infrastructure or UAT tests are requested, start everything autonomously — refer to project CLAUDE.md to understand how to start the local stack and app.
 
 ## Glab MR Review workflow
 When user asks to review MR comments:

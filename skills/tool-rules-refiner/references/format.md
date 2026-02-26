@@ -45,10 +45,12 @@
 
 ## Suggestion Output Format
 
+Number every suggestion sequentially across all severity groups. The user will reference suggestions by number when approving/rejecting.
+
 ```markdown
 ## Suggested Rule Updates
 
-### 🔴 STRENGTHEN — [Tool] / [Sub-group]
+### 1. 🔴 STRENGTHEN — [Tool] / [Sub-group]
 
 **File:** `~/.claude/guides/Tools.md`
 **Section:** `## Bash > ### Git`
@@ -63,7 +65,7 @@
 
 ---
 
-### 🟡 ADD — [Tool] / [Sub-group]
+### 2. 🟡 ADD — [Tool] / [Sub-group]
 
 **File:** `~/.claude/guides/Tools.md`
 **Section:** `## Bash > ### jq`
@@ -75,7 +77,7 @@
 
 ---
 
-### ⚠️ CONFLICT — [Tool] / [Sub-group]
+### 3. ⚠️ CONFLICT — [Tool] / [Sub-group]
 
 **Proposed:** `- NEVER use pipes with jq`
 **Conflicts with:** `CLAUDE.local.md` line 14: "Prefer simple piped commands"
