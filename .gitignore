@@ -8,6 +8,7 @@
 !/agents
 !/skills
 !/guides
+!/ai-contribution-tracker/config.json
 !/hooks
 !/ai-contribution-tracker
 

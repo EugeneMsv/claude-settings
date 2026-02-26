@@ -39,7 +39,7 @@
     "commands": [
       "spotlessApply",
       "prettier",
-      "black",
+      "ruff",
       "eslint.*--fix",
       "gofmt",
       "rustfmt",
@@ -54,7 +54,7 @@
   },
   "housekeeping": {
     "enabled": true,
-    "staleDaysThreshold": 7,
+    "staleDaysThreshold": 5,
     "maxFilesPerRun": 5
   }
 }
