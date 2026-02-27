@@ -1,0 +1,22 @@
+# Ignore everything at root level
+/*
+/**/*.log
+.DS_Store
+
+# Except these directories
+!/agents
+!/skills
+!/guides
+!/hooks
+!/ai-contribution-tracker
+
+# Except these root-level files
+!/*.md
+!/settings.local.json
+!/settings.template.json
+!/tmux-git-diff.sh
+!/tmux-git-status.sh
+
+# Exclude specific sensitive files
+CLAUDE.md
+settings.json

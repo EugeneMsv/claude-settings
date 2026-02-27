@@ -1,0 +1,177 @@
+{
+  "awsCredentialExport": "<command-to-export-aws-credentials>",
+  "env": {
+    "ANTHROPIC_DEFAULT_HAIKU_MODEL": "arn:aws:bedrock:us-east-1:<your-aws-account-id>:inference-profile/global.anthropic.claude-haiku-4-5-20251001-v1:0",
+    "ANTHROPIC_DEFAULT_OPUS_MODEL": "arn:aws:bedrock:us-east-1:<your-aws-account-id>:inference-profile/global.anthropic.claude-opus-4-6-v1",
+    "ANTHROPIC_DEFAULT_SONNET_MODEL": "arn:aws:bedrock:us-east-1:<your-aws-account-id>:inference-profile/global.anthropic.claude-sonnet-4-6",
+    "ANTHROPIC_MODEL": "arn:aws:bedrock:us-east-1:<your-aws-account-id>:inference-profile/global.anthropic.claude-sonnet-4-6",
+    "AWS_PROFILE": "<your-aws-profile>",
+    "AWS_REGION": "us-east-1",
+    "CLAUDE_CODE_ENABLE_TELEMETRY": "1",
+    "CLAUDE_CODE_SUBAGENT_MODEL": "arn:aws:bedrock:us-east-1:<your-aws-account-id>:inference-profile/global.anthropic.claude-sonnet-4-6",
+    "CLAUDE_CODE_USE_BEDROCK": "1",
+    "DISABLE_BUG_COMMAND": "1",
+    "DISABLE_ERROR_REPORTING": "1",
+    "OTEL_EXPORTER_OTLP_ENDPOINT": "http://localhost:4317",
+    "OTEL_EXPORTER_OTLP_PROTOCOL": "grpc",
+    "OTEL_LOGS_EXPORT_INTERVAL": "5000",
+    "OTEL_METRICS_EXPORTER": "otlp",
+    "OTEL_METRIC_EXPORT_INTERVAL": "10000"
+  },
+  "attribution": {
+    "commit": "",
+    "pr": ""
+  },
+  "permissions": {
+    "allow": [
+      "mcp__sequentialthinking__*",
+      "mcp__context7__*",
+      "Glob",
+      "Grep",
+      "ListMcpResourcesTool",
+      "ReadMcpResourceTool",
+      "Bash(ls *)",
+      "Bash(grep *)",
+      "Bash(find *)",
+      "Bash(sed *)",
+      "Bash(jq *)",
+      "Bash(head *)",
+      "Bash(tail *)",
+      "Bash(git log *)",
+      "Bash(git * log *)",
+      "Bash(git * status *)",
+      "Bash(git * status)",
+      "Bash(git checkout *)",
+      "Bash(git * fetch *)",
+      "Bash(git fetch *)",
+      "Bash(git * diff *)",
+      "Bash(git * show *)",
+      "Bash(git * branch *)",
+      "Bash(git * tag *)",
+      "Bash(git * blame *)",
+      "Bash(git * remote *)",
+      "Bash(git * stash list *)",
+      "Bash(./gradlew *)",
+      "Bash(glab mr view *)",
+      "Bash(glab mr list *)",
+      "Bash(glab mr diff *)",
+      "Bash(glab mr issues *)",
+      "Bash(glab mr approvers *)",
+      "Bash(glab mr checkout *)",
+      "Bash(glab mr subscribe *)",
+      "Bash(glab mr unsubscribe *)",
+      "Bash(glab mr todo *)",
+      "Read(**/*.java)",
+      "Read(**/*.kt)",
+      "Read(**/*.md)",
+      "Read(**/*.properties)",
+      "Read(**/*.yaml)",
+      "Read(**/*.yml)",
+      "Read(**/.claude/**)",
+      "Read(**/.git/**)",
+      "Read(**/.gitignore)",
+      "Read(**/.run)",
+      "Edit(**/.claude/**)",
+      "Edit(**/.git/**)",
+      "Write(**/.claude/**)",
+      "Write(**/.git/**)"
+    ],
+    "deny": [
+      "mcp__confluence__confluence_delete_page",
+      "Read(**/secrets/**)",
+      "Read(**/*.key)",
+      "Read(**/*.pem)",
+      "Read(**/node_modules/**)",
+      "Read(**/tmp/**)",
+      "Read(**/*.env)",
+      "Read(**/.env)",
+      "Read(**/*.venv)",
+      "Read(**/.venv)",
+      "Read(**/*.idea)",
+      "Read(**/.idea)",
+      "Edit(**/*.env)",
+      "Edit(**/.env)",
+      "Write(**/*.env)",
+      "Write(**/.env)",
+      "Bash(rm -rf *)",
+      "Bash(git * push --force *)",
+      "Bash(git * push -f *)",
+      "Bash(sudo *)",
+      "Bash(su *)",
+      "Bash(chmod 777 *)",
+      "Bash(chown *)",
+      "Bash(kubectl * delete *)",
+      "Bash(terraform * destroy *)",
+      "Bash(sed -i*)",
+      "Bash(sed * -i*)",
+      "Bash(glab mr merge *)",
+      "Bash(glab mr close *)",
+      "Bash(glab mr delete *)"
+    ],
+    "ask": [
+      "Bash(git * add *)",
+      "Bash(git * commit *)",
+      "Bash(git * push *)",
+      "Bash(rm *)",
+      "Bash(git * merge *)",
+      "Bash(git * rebase *)",
+      "Bash(curl*)",
+      "Bash(glab mr note *)",
+      "Bash(glab mr create *)",
+      "Bash(glab mr approve *)",
+      "Bash(glab mr revoke *)",
+      "Bash(glab mr reopen *)",
+      "Bash(glab mr rebase *)",
+      "Bash(glab mr update *)",
+      "Bash(glab mr for *)"
+    ],
+    "defaultMode": "default",
+    "disableBypassPermissionsMode": "disable"
+  },
+  "model": "sonnet",
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash ~/.claude/hooks/plan-sync/copy-plan-on-change.sh",
+            "timeout": 10
+          }
+        ]
+      },
+      {
+        "matcher": "Edit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash ~/.claude/hooks/plan-sync/copy-plan-on-change.sh",
+            "timeout": 10
+          }
+        ]
+      },
+      {
+        "matcher": "ExitPlanMode",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash ~/.claude/hooks/plan-sync/copy-plan-on-exit.sh",
+            "timeout": 10
+          }
+        ]
+      }
+    ]
+  },
+  "statusLine": {
+    "type": "command",
+    "command": "<your-statusline-command>",
+    "padding": 0
+  },
+  "enabledPlugins": {
+    "commit-commands@claude-plugins-official": true,
+    "kotlin-lsp@claude-plugins-official": true,
+    "plugin-dev@claude-plugins-official": true,
+    "ai-contribution-tracker@eug-msv-claude-marketplace": false
+  }
+}

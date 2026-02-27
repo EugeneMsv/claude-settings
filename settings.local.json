@@ -1,0 +1,14 @@
+{
+  "attribution": {
+    "commit": "",
+    "pr": ""
+  },
+  "permissions": {
+    "allow": [
+      "mcp__sequentialthinking__sequentialthinking",
+      "WebFetch(domain:docs.gitlab.com)",
+      "Bash(gh api:*)"
+    ]
+  },
+  "outputStyle": "default"
+}
