@@ -32,7 +32,7 @@ If ANY check fails, do NOT proceed. Fix the issue first.
 
 **Collect required values:**
 - `<story-id>`: Story/ticket identifier
-- `<env-prefix>`: Environment prefix (dev, staging, prod, intqa)
+- `<env-prefix>`: Environment prefix (dev, staging, prod, qa)
 - `<service-name>`: Service name to update
 - `<version>`: New version tag
 
