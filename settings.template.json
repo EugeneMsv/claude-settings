@@ -1,14 +1,17 @@
 {
+  "alwaysThinkingEnabled": true,
   "attribution": {
     "commit": "",
     "pr": ""
   },
   "awsCredentialExport": "<command-to-export-aws-credentials>",
   "enabledPlugins": {
-    "ai-contribution-tracker@eug-msv-claude-marketplace": false,
+    "ai-herald@eug-msv-claude-marketplace": false,
     "commit-commands@claude-plugins-official": true,
+    "jdtls-lsp@claude-plugins-official": true,
     "kotlin-lsp@claude-plugins-official": true,
-    "plugin-dev@claude-plugins-official": true
+    "plugin-dev@claude-plugins-official": true,
+    "pyright-lsp@claude-plugins-official": true
   },
   "env": {
     "ANTHROPIC_DEFAULT_HAIKU_MODEL": "arn:aws:bedrock:us-east-1:<your-aws-account-id>:inference-profile/global.anthropic.claude-haiku-4-5-20251001-v1:0",
@@ -22,24 +25,22 @@
     "CLAUDE_CODE_USE_BEDROCK": "1",
     "DISABLE_BUG_COMMAND": "1",
     "DISABLE_ERROR_REPORTING": "1",
+    "ENABLE_LSP_TOOL": "1",
     "OTEL_EXPORTER_OTLP_ENDPOINT": "http://localhost:4317",
     "OTEL_EXPORTER_OTLP_PROTOCOL": "grpc",
     "OTEL_LOGS_EXPORT_INTERVAL": "5000",
     "OTEL_METRICS_EXPORTER": "otlp",
     "OTEL_METRIC_EXPORT_INTERVAL": "10000"
   },
-  "hooks": {
-    "PostToolUseFailure": [
-      {
-        "matcher": "*",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "bash ~/.claude/hooks/fail-detector/fail-detector.sh"
-          }
-        ]
+  "extraKnownMarketplaces": {
+    "<your-marketplace-name>": {
+      "source": {
+        "path": "<path-to-your-local-marketplace>",
+        "source": "directory"
       }
-    ],
+    }
+  },
+  "hooks": {
     "PostToolUse": [
       {
         "hooks": [
@@ -71,9 +72,20 @@
         ],
         "matcher": "ExitPlanMode"
       }
+    ],
+    "PostToolUseFailure": [
+      {
+        "hooks": [
+          {
+            "command": "bash ~/.claude/hooks/fail-detector/fail-detector.sh",
+            "type": "command"
+          }
+        ],
+        "matcher": "*"
+      }
     ]
   },
-  "model": "opus",
+  "model": "sonnet",
   "permissions": {
     "allow": [
       "mcp__sequentialthinking__*",
@@ -180,9 +192,11 @@
     ],
     "disableBypassPermissionsMode": "disable"
   },
+  "showTurnDuration": true,
   "statusLine": {
     "type": "command",
     "command": "<your-statusline-command>",
     "padding": 0
-  }
+  },
+  "teamMateMode": "tmux"
 }

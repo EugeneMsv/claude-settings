@@ -7,6 +7,7 @@
 
 ## Guidelines:
 - Always prefer built-in tools like `Grep` `Glob` over `Bash`
+- Always prefer `LSP` over `Grep`, `Glob`, `Search`
 - Prefer using `Edit` over `Write`
 - Use `mcp__sequentialthinking__sequentialthinking` to plan complex tasks
 - Use `mcp__context7__resolve-library-id` and `mcp__context7__get-library-docs` before generating/changing any code
@@ -30,11 +31,18 @@
 ## Bash
 
 ### Git
-- NEVER retry git push after non-fast-forward rejection — run `git pull --rebase` first, then push
-- NEVER run `git pull --rebase` with unstaged changes present — stash first, rebase, then stash pop
+- On non-fast-forward rejection, run `git pull --rebase` then push once — do not retry bare push
+- Stash unstaged changes before `git pull --rebase`, pop after
+- Stash unstaged changes before `git checkout <branch>`, pop after
+- Push with `git push origin $(git branch --show-current)` — avoids macOS case-mismatch on branch names
 
 ### gh / glab
 - NEVER use `gh` on GitLab repos — use `glab` instead (`glab mr create`, `glab mr list`, etc.)
+- Use `--opened`, `--closed`, `--merged`, or `--all` for `glab mr list` filtering (no `--state` flag)
+- Include `--fill` with `glab mr create` in non-interactive mode
+
+### File Operations
+- Use `Glob` tool for file search — not `find` in Bash
 
 ## Read
-- NEVER Read files >256KB without offset+limit params — use Grep to search or read specific portions
+- Read files >256KB or >25k tokens using offset+limit — use Grep for targeted search
