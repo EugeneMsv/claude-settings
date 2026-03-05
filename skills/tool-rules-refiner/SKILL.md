@@ -54,8 +54,9 @@ See `references/format.md` for the target `Tools.md` structure and suggestion ou
 - `CONFLICT` (⚠️): Proposed rule contradicts existing memory
 
 **Rule quality criteria:**
-- One line, imperative, starts with `NEVER`/`ALWAYS`/`Use`/`Avoid`
-- No examples unless critical (use inline: `NEVER X — use Y instead`)
+- One line, imperative, action-first — prefer positive commands ("Use X", "Run Y before Z", "Stash before checkout")
+- Reserve `NEVER` only for destructive or irreversible operations
+- No examples unless critical (use inline: `Use X — not Y`)
 - Minimal tokens: cut articles, use contractions, abbreviate obvious context
 - If strengthening: replace old rule, don't add duplicate alongside it
 

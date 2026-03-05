@@ -37,11 +37,13 @@
 
 **Rule style:**
 ```
-- NEVER `git add .` — stage specific files only
-- ALWAYS use `git --no-pager <cmd>`
-- Use `Grep` tool, not `grep`/`rg` in bash
-- Avoid `echo > file` — use Write tool
+- Stage specific files only — not `git add .`
+- Use `git --no-pager <cmd>` for clean output
+- Use `Grep` tool for content search — not `grep`/`rg` in Bash
+- Use Write tool for file creation — not `echo > file`
+- NEVER `git reset --hard` without confirming no uncommitted work (destructive → OK for NEVER)
 ```
+Reserve `NEVER` for destructive or irreversible operations. Prefer positive action commands otherwise.
 
 ## Suggestion Output Format
 
