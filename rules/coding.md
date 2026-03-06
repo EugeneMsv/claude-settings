@@ -27,5 +27,3 @@ When user requests "smart" scripts or automation:
 - Include both simple and advanced usage modes
 - Prefer feature-rich over minimal implementations
 
-@guides/Java.md
-@guides/Kotlin.md

@@ -1,3 +1,10 @@
+---
+paths:
+  - "**/*.java"
+  - "**/*.kt"
+  - "**/*.kts"
+---
+
 # All Java related guides
 
 ## codestyle guide

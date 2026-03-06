@@ -1,3 +1,10 @@
+---
+paths:
+  - "**/*.java"
+  - "**/*.kt"
+  - "**/*.kts"
+---
+
 # All Kotlin related guides
 
 ## Testing Patterns 

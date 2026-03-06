@@ -62,7 +62,3 @@ ALWAYS MUST:
 - Use contractions when appropriate
 - Use internal memory to avoid redundant operations
 
-@guides/Coding.md
-@guides/Tools.md
-@guides/Workflows.md
-@guides/Key-commands.md
