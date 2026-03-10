@@ -299,15 +299,45 @@ For each inline comment (DiffNote type):
    Resolves comment #<id> on MR !<number>"
    ```
 
-5. **Confirm Progress**
+5. **Post Reply to Discussion**
+
+   After the commit, post a concise AI-labelled reply to the GitLab discussion thread.
+   Use the `discussion_id` from the parsed comments JSON (`discussions[].id`).
+
+   ```bash
+   glab api "projects/<encoded-path>/merge_requests/<mr-number>/discussions/<discussion_id>/notes" \
+     --method POST \
+     --field "body=*(AI-generated response)*
+
+   <concise summary of what was changed and why>"
+   ```
+
+   - Start the body with `*(AI-generated response)*` on its own line
+   - Follow with 1–3 sentences summarising the change
+   - If multiple reviewer notes share the same discussion thread, post **one** reply covering all of them
+
+6. **Resolve Discussion**
+
+   After posting the reply, mark the discussion as resolved:
+
+   ```bash
+   glab api "projects/<encoded-path>/merge_requests/<mr-number>/discussions/<discussion_id>" \
+     --method PUT \
+     --field "resolved=true"
+   ```
+
+   Confirm resolution by checking `resolved: true` in the response. If the API returns an
+   error or `resolved` is still false, report the failure to the user but continue.
+
+7. **Confirm Progress**
 
    - Display commit result
    - Show verification output
    - Ask: "Comment #<id> addressed. Continue to next? (yes/no)"
 
-6. **Repeat for Next Comment**
+8. **Repeat for Next Comment**
 
-7. **Final Summary**
+9. **Final Summary**
 
    After all comments addressed:
    ```
@@ -317,7 +347,7 @@ For each inline comment (DiffNote type):
 
    Summary:
    - <N> commits created
-   - <N> review comments resolved
+   - <N> GitLab discussions resolved
    - All tests passing
 
    Plan files stored in .claude/ for reference.
@@ -346,6 +376,8 @@ For each inline comment (DiffNote type):
 - One commit per comment addressed
 - Use specified commit message format
 - Display commit result and verification output to user
+- Post an AI-labelled reply to the GitLab discussion after each commit, starting with `*(AI-generated response)*`
+- Resolve the GitLab discussion via PUT after posting the reply
 - Keep plan files in `.claude/` for reference
 
 ### SHOULD
@@ -552,6 +584,19 @@ Resolves comment #2 on MR !1234
 
 ✅ Commit created
 
+*[Posts reply to discussion via `glab api "projects/org%2Frepo/merge_requests/1234/discussions/<id>/notes" --method POST --field "body=..."`]*
+
+```
+*(AI-generated response)*
+
+Added explicit null/undefined check in `validateUser`. Error messages now distinguish
+between null and empty email. Test cases for both scenarios added.
+```
+
+*[Resolves discussion via `glab api "projects/org%2Frepo/merge_requests/1234/discussions/<id>" --method PUT --field "resolved=true"`]*
+
+✅ Discussion resolved on GitLab
+
 Comment #2 addressed. Continue to next? (yes/no)
 
 **User:** "yes"
@@ -589,6 +634,19 @@ Resolves comment #3 on MR !1234
 
 ✅ Commit created
 
+*[Posts reply to discussion via `glab api .../discussions/<id>/notes --method POST`]*
+
+```
+*(AI-generated response)*
+
+Added missing test cases for null and undefined email inputs. All assertions verify
+the expected error message is thrown.
+```
+
+*[Resolves discussion via `glab api .../discussions/<id> --method PUT --field "resolved=true"`]*
+
+✅ Discussion resolved on GitLab
+
 ```
 ═══════════════════════════════════════════════════════════
 ALL COMMENTS ADDRESSED
@@ -596,7 +654,7 @@ ALL COMMENTS ADDRESSED
 
 Summary:
 - 2 commits created
-- 2 review comments resolved
+- 2 GitLab discussions resolved
 - All tests passing
 
 Plan files stored in .claude/ for reference.
