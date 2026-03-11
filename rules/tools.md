@@ -11,7 +11,7 @@
 - Prefer using `Edit` over `Write`
 - Use `mcp__sequentialthinking__sequentialthinking` to plan complex tasks
 - Use `mcp__context7__resolve-library-id` and `mcp__context7__get-library-docs` before generating/changing any code
-- When using git CLI, use `git --no-pager <subcommand>` for clean output (global flag goes BEFORE subcommand, e.g. `git --no-pager log`)
+- When using git CLI, use `git --no-pager <subcommand>` — global flag BEFORE subcommand once only; NEVER repeat `--no-pager` after the subcommand
 - **Prefer simple commands over pipes**: When a single command accomplishes the goal, use it instead of piped alternatives. Example:
   prefer `git log -n 5 --stat` over `git log --format=%H -n 5 | xargs -I {} git show {} --stat`. Simpler commands are clearer, less
   error-prone, and may avoid unnecessary permission prompts.
@@ -40,9 +40,20 @@
 - NEVER use `gh` on GitLab repos — use `glab` instead (`glab mr create`, `glab mr list`, etc.)
 - Use `--opened`, `--closed`, `--merged`, or `--all` for `glab mr list` filtering (no `--state` flag)
 - Include `--fill` with `glab mr create` in non-interactive mode
+- NEVER use `glab ci view` non-interactively — requires TTY; use `glab ci get <id>` instead
+- Use single quotes for `glab api` URL arguments — double quotes cause Python escape errors on special chars (`\!`, etc.)
 
 ### File Operations
 - Use `Glob` tool for file search — not `find` in Bash
 
+### General
+- Use `python3` — `python` command not available on macOS
+
+## Edit
+- Re-read file before retrying when Edit fails with "File has been unexpectedly modified"
+
+## Glob
+- NEVER glob with path at /Users or home root — always specify a project subdirectory; times out after 20s
+
 ## Read
-- Read files >256KB or >25k tokens using offset+limit — use Grep for targeted search
+- Use Grep for targeted search before attempting Read on unknown-size files; use offset+limit only when file is >256KB or >25k tokens — never Read entire log/output dump files
