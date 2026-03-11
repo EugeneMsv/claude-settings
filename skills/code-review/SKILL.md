@@ -275,8 +275,11 @@ Review Score: X/100
 - MUST reference specific file paths with line numbers
 - MUST include code snippets for top 3 most significant changes
 - MUST verify test coverage for all major changes
+- MUST present the review output in chat — NEVER post to GitLab MR unless user explicitly instructs it
+- MUST draw ASCII before/after directory layout diagrams when packages, modules, or files are reorganized
 - DO NOT review test files in detail (only verify coverage)
 - DO NOT comment on formatting if spotlessApply will handle it
+- DO NOT mention files where only imports changed — skip them entirely
 
 ### Example Invocation
 

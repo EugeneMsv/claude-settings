@@ -196,11 +196,12 @@ Eliminates repeated corrections, aligns with user's established workflow prefere
 - Avoid overly complex rules
 - Keep memory files scannable
 
-**Scope-Appropriate:**
-- Global preferences → `~/.claude/CLAUDE.local.md`
+**Scope-Appropriate (priority order):**
+- **Highest priority**: `~/.claude/rules/*.md` — topic-specific rule files (coding, git, tools, workflows); add/update rules here first
+- **Global file**: `~/.claude/CLAUDE.local.md` — general preferences and cross-cutting instructions
+- **Auto-memory**: project-specific `.claude/memory/*.md` is secondary; if an entry is generic enough to apply across projects, promote it to `rules/` or `CLAUDE.local.md` instead
 - Domain-specific → `~/.claude/[domain].md`
-- Project-specific → `.claude/*.md`
-- Standards/policies → `~/.claude/CLAUDE.md` (warn: managed file)
+- Standards/policies → `~/.claude/CLAUDE.md` (warn: managed file, do not edit directly)
 
 ## Implementation Steps
 
