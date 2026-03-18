@@ -16,6 +16,7 @@
 13. Imports must be added atomically with the code changes in a single Tool invocation
 14. Prefer parametrized tests over single case tests
 15. Extract complex logic or calculations to separate named methods
+16. Avoid generic variable names (`data`, `result`, `obj`, `item`) in production/service code — use type-qualified names (e.g., `subscriptionData`, `paymentResult`); test-local variables are exempt
 
 
 ## Script/Tool Creation:

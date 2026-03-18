@@ -1,7 +1,7 @@
 ---
 name: deployer
 description: When user requests to deploy, update deployment, or upgrade a service version.
-model: haiku
+model: sonnet
 color: red
 ---
 

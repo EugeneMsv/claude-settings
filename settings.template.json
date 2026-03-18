@@ -94,17 +94,6 @@
           }
         ],
         "matcher": "EnterPlanMode"
-      },
-      {
-        "hooks": [
-          {
-            "model": "haiku",
-            "prompt": "Examine the `plan` field in $ARGUMENTS. Every task (identified by 'Task' + number/letter + ':') MUST have (1) a verification section with test commands or validation steps, (2) an explicit commit message in format 'Task N: description'. If any task is missing these, return {\"continue\":false,\"reason\":\"PLAN INCOMPLETE: <list which tasks are missing verification or commit message>\"}. If all tasks comply or there are no tasks: return {\"continue\":true}.",
-            "timeout": 20,
-            "type": "prompt"
-          }
-        ],
-        "matcher": "ExitPlanMode"
       }
     ],
     "UserPromptSubmit": [

@@ -10,10 +10,17 @@ Always MUST:
 - Use format: Task N: <description>
 - Never combine multiple tasks in one commit
 - NEVER chain git operations — run each command independently and verify result before proceeding (includes `add && commit`, `commit && push`, `stash && pull && pop && push`)
+- To revert a committed file on a pushed branch: `git checkout HEAD~1 -- <file>`, then new commit (never amend pushed commits)
 - Git worktrees MUST NEVER be created in `.claude` - they MUST ALWAYS be created one folder above the current directory
   When creating worktrees for code review, use pattern: `../{repository-name}-{purpose}-{git-ref-or-branch-name}`
   Example: `git worktree add ../my-repo-review-story-PROJ-16360 origin/story/PROJ-16360`
 
+
+## Post-Push MR Workflow
+After pushing a branch:
+1. Find MR: `glab mr list --source-branch <branch>`
+2. Assign: `glab mr update <id> --assignee <username>`
+3. Update title if needed: `glab mr update <id> --title "PROJ-XXXXX: <description>"`
 
 ## Local Infrastructure
 When local dev infrastructure or UAT tests are requested, start everything autonomously — refer to project CLAUDE.md to understand how to start the local stack and app.

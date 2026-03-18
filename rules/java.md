@@ -7,6 +7,10 @@ paths:
 
 # All Java related guides
 
+## Project Conventions
+- No `@Nullable` annotations — not typically used
+- Avoid generic variable names (`data`, `result`, `obj`) in production/service code — use type-qualified names (e.g., `subscriptionData`, `paymentResult`); test-local variables are exempt
+
 ## codestyle guide
 1. `final` and `var` keywords everywhere are preferred
 2. Prefer records for data carriers
