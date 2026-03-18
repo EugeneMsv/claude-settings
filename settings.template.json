@@ -96,6 +96,17 @@
         ],
         "matcher": "ExitPlanMode"
       }
+    ],
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "command": "echo '{\"hookSpecificOutput\": {\"hookEventName\": \"UserPromptSubmit\", \"additionalContext\": \"When creating a plan: (1) every task MUST have an explicit verification section with test commands or validation steps; (2) every task MUST end with an explicit commit; (3) the last task MUST run full test suite verification AND update relevant documentation before its commit. When presenting pros and cons, prefix each pro with \ud83d\udfe2 and each con with \ud83d\udd34.\"}}'",
+            "timeout": 5,
+            "type": "command"
+          }
+        ]
+      }
     ]
   },
   "model": "sonnet",
