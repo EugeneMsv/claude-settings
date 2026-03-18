@@ -12,6 +12,7 @@ set -g status-format[1] '#[align=left,bg=colour234,fg=colour248] #(echo "#{pane_
 set -g default-terminal "tmux-256color"
 set -g history-limit 50000
 set -g renumber-windows on
+set -g allow-passthrough on
 
 # M-q f — toggle git changed-files tree in a right split pane (35% width)
 bind-key f run-shell "~/.claude/tmux/tmux-toggle-git-tree.sh"

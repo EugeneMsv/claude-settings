@@ -177,7 +177,7 @@ git -C "$p" log --no-decorate -n 10 \
 repo_root=$(git -C "$p" rev-parse --show-toplevel 2>/dev/null)
 branch_sanitized=$(printf '%s' "$branch" | tr '/\\' '-')
 herald_file="$repo_root/.claude/herald/${branch_sanitized}.json"
-tracker_file="$repo_root/.claude/ai-tracking-${branch_sanitized}.json"
+tracker_file="$repo_root/.claude/ai-tracker/${branch_sanitized}.json"
 [[ -f "$herald_file" ]] && ai_file="$herald_file" || ai_file="$tracker_file"
 
 if [[ -f "$ai_file" ]]; then
