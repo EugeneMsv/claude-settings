@@ -101,7 +101,7 @@
       {
         "hooks": [
           {
-            "command": "echo '{\"hookSpecificOutput\": {\"hookEventName\": \"UserPromptSubmit\", \"additionalContext\": \"When creating a plan: (1) every task MUST have an explicit verification section with test commands or validation steps; (2) every task MUST end with an explicit commit; (3) the last task MUST run full test suite verification AND update relevant documentation before its commit. When presenting pros and cons, prefix each pro with \ud83d\udfe2 and each con with \ud83d\udd34.\"}}'",
+            "command": "echo '{\"hookSpecificOutput\": {\"hookEventName\": \"UserPromptSubmit\", \"additionalContext\": \"When creating a plan: (1) every task MUST have an explicit verification section with test commands or validation steps; (2) every task MUST end with an explicit commit; (3) the last task MUST run full test suite verification AND update relevant documentation before its commit. When presenting pros and cons, prefix each pro with \ud83d\udfe2 and each con with \ud83d\udd34. When presenting multiple options or choices, number them (1, 2, 3...) instead of using bullets \u2014 makes selection unambiguous. When comparing 3 or more options or approaches, use a comparison table. Before proposing a solution, state your confidence level (high/medium/low) and a one-sentence reason. When you notice a risk or side-effect of what you are about to do, mention it in one sentence before proceeding.\"}}'",
             "timeout": 5,
             "type": "command"
           }
