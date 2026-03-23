@@ -56,5 +56,13 @@
     "enabled": true,
     "staleDaysThreshold": 5,
     "maxFilesPerRun": 5
+  },
+  "ignored_paths": [
+    "**/generated/**",
+    ".claude/**",
+    ".tmp/**"
+  ],
+  "history": {
+    "enabled": true
   }
 }
