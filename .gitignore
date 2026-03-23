@@ -11,6 +11,10 @@
 !/ai-contribution-tracker/config.json
 !/hooks
 !/ai-contribution-tracker
+ai-contribution-tracker/history
+!/ai-herald
+!/ai-herald/config.json
+ai-herald/history
 
 # Except these root-level files
 !/*.md
@@ -18,6 +22,9 @@
 !/settings.template.json
 !/tmux-git-diff.sh
 !/tmux-git-status.sh
+
+# Except root dotfiles
+!/.mcp.json
 
 # Exclude specific sensitive files
 CLAUDE.md
