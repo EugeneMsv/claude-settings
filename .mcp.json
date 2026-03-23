@@ -1,0 +1,22 @@
+{
+  "context7": {
+    "args": [
+      "run",
+      "-i",
+      "--rm",
+      "-e",
+      "MCP_TRANSPORT=stdio",
+      "mcp/context7"
+    ],
+    "command": "docker"
+  },
+  "sequentialthinking": {
+    "args": [
+      "run",
+      "-i",
+      "--rm",
+      "mcp/sequentialthinking"
+    ],
+    "command": "docker"
+  }
+}
