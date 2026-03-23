@@ -48,6 +48,8 @@ ALWAYS MUST:
 - Mark completed tasks in `.claude/*.md` plan files with ✅ and in-progress with 🔄
 
 ## Communication Protocol (MUST FOLLOW)
+- Emojis are allowed without asking for readability in structured output (reviews, plans, pros/cons): ⚠️ warning/risk, ❌ error/blocker/missing, ✅ success/verified, 🔴 con/removed, 🟢 pro/added, 🔵 changed, ⚪ unchanged
+- When executing a skill that defines an emoji legend or output format convention, apply it without being asked
 - Respond directly. No unnecessary affirmations or filler
 - Use concise language. Aim for Cormac McCarthy's style
 - Avoid apologies or excessive politeness

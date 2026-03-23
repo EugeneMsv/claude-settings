@@ -100,18 +100,34 @@ def call_anthropic(context: str) -> str:
 
 def main() -> None:
     hook_input = json.load(sys.stdin)
+    hook_event = hook_input.get("hook_event_name", "PreToolUse")
     cwd = hook_input.get("cwd", os.getcwd())
+
+    # For UserPromptSubmit, only activate when actually in plan mode
+    if hook_event == "UserPromptSubmit" and hook_input.get("permission_mode") != "plan":
+        print("{}")
+        return
 
     try:
         context = collect_context(cwd)
         if context:
             system_message = call_anthropic(context)
+            status_line = "[plan-enforcer] ✅ AI-generated requirements loaded for this project"
         else:
             system_message = FALLBACK_MESSAGE
+            status_line = "[plan-enforcer] ⚠️ No project context found — using fallback defaults"
     except Exception:  # noqa: BLE001
         system_message = FALLBACK_MESSAGE
+        status_line = "[plan-enforcer] ❌ Failed to generate requirements — using fallback defaults"
 
-    print(json.dumps({"systemMessage": system_message}))
+    output = {
+        "systemMessage": status_line,
+        "hookSpecificOutput": {
+            "hookEventName": hook_event,
+            "additionalContext": system_message,
+        },
+    }
+    print(json.dumps(output))
 
 
 if __name__ == "__main__":
