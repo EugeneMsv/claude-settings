@@ -1,0 +1,71 @@
+{
+  "enabled": true,
+  "base_branches": [
+    "main",
+    "epam-main",
+    "github-main",
+    "master",
+    "develop"
+  ],
+  "tracked_extensions": [
+    ".java",
+    ".kt",
+    ".kts",
+    ".scala",
+    ".py",
+    ".js",
+    ".ts",
+    ".tsx",
+    ".jsx",
+    ".go",
+    ".rs",
+    ".c",
+    ".cpp",
+    ".h",
+    ".hpp",
+    ".sql",
+    ".yml",
+    ".yaml",
+    ".json",
+    ".xml",
+    ".properties",
+    ".toml",
+    ".sh",
+    ".bash",
+    ".feature",
+    ".gitignore"
+  ],
+  "enable_logging": true,
+  "log_file": "ai-herald.log",
+  "format_detection": {
+    "enabled": true,
+    "commands": [
+      "spotlessApply",
+      "prettier",
+      "ruff",
+      "eslint.*--fix",
+      "gofmt",
+      "rustfmt",
+      "clang-format"
+    ]
+  },
+  "mr": {
+    "titleUpdateEnabled": false,
+    "descriptionUpdateEnabled": true,
+    "autoCreationEnabled": true,
+    "labelingEnabled": true
+  },
+  "housekeeping": {
+    "enabled": true,
+    "staleDaysThreshold": 7,
+    "maxFilesPerRun": 5
+  },
+  "ignored_paths": [
+    "**/generated/**",
+    ".claude/**",
+    ".tmp/**"
+  ],
+  "history": {
+    "enabled": true
+  }
+}
