@@ -9,7 +9,7 @@ allowed-tools: Read, Grep, Glob, Edit
 
 ## Purpose
 
-Analyze `~/.claude/tool-detector/log.jsonl` to find what tools and commands are actually used, cross-reference against all permission layers (user / local / project), and propose security-hardened changes to `allow`, `ask`, and `deny` arrays. Security-first: when in doubt, restrict.
+Analyze `~/.claude/tool-detector/log.jsonl` to find what tools and commands are actually used, cross-reference against all permission layers (user / local / project), and propose pragmatic changes to `allow`, `ask`, and `deny` arrays. Default stance: allow reads on non-secret paths and writes to expected project/work paths — restrict only sensitive targets, credentials, and genuinely destructive operations.
 
 ## Target Files (in precedence order)
 
@@ -60,17 +60,68 @@ Classify each log pattern:
 | `ALREADY_COVERED` | ⚪ | Matched by existing rule — skip (count only in summary) |
 | `OVERLY_PERMISSIVE` | ⚠️ | Rule in `allow` that was never seen in log and has dangerous potential |
 
-**Security classification rules (apply in this order):**
+**Classification rules (apply in this order):**
 
-1. **`MOVE_TO_DENY`**: Bash commands touching `~/.aws`, `~/.ssh`, `*.key`, `*.pem`, `*.env`, secrets dirs; package publishing (`npm publish`, `pip upload`); force-push, hard-reset, `rm -rf`; privilege escalation (`sudo`, `su`).
-2. **`MOVE_TO_ASK`**: Bash commands that install packages (`brew install`, `pip install`, `npm install`); deploy artifacts; exec into remote systems; write files outside `.claude/`; make network calls (`curl`, `wget`); run migrations; scale or apply to clusters.
-3. **`ADD_TO_ALLOW`**: `Read`, `Glob`, `Grep` on non-sensitive paths; read-only `Bash` ops (git log, git status, git diff, git show, ls, jq, head, tail); `LSP`; `mcp__*` tools (read-only MCP calls).
-4. **`UNMATCHED`** (no clear category): flag for user decision with a recommendation.
-5. **`OVERLY_PERMISSIVE`**: scan `allow[]` for rules that: (a) have no matching log entry in recent history AND (b) match patterns known to be dangerous (file write, exec, network, package management).
+1. **`MOVE_TO_DENY`**: Anything touching `~/.aws`, `~/.ssh`, `*.key`, `*.pem`, `*.env`, secrets dirs; package publishing (`npm publish`, `pip upload`); force-push (`git push --force`), hard-reset, `rm -rf`; privilege escalation (`sudo`, `su`); pushing secrets or credentials to any remote.
+
+2. **`MOVE_TO_ASK`** — applies to any operation that is **remote** or **synchronizes with remote** (excluding git — see Git Special Group below):
+   - **Remote reads**: `curl`, `wget`, `glab api`, `gh api`, `aws * get*`, `kubectl get`, MCP tools that call external APIs. Risk: response may contain injected content.
+   - **Remote mutations**: deploys, `kubectl apply/scale`, `terraform apply`, `helm install/upgrade`, `aws * create/update/put`, migrations, any CLI with verbs like `sync`, `deploy`, `publish`, `upload`, `send`.
+   - Package installs: `brew install`, `pip install`, `npm install` — network + filesystem mutation.
+   - Exec into remote systems: `ssh`, `kubectl exec`, `docker exec`.
+
+3. **`ADD_TO_ALLOW`**:
+   - `Read`, `Glob`, `Grep` on **any non-secret path** — always allow.
+   - `Edit` and `Write` to **expected project/work paths** (source files, configs, `.claude/`, build output) — allow if target is not a secret/credential file.
+   - Pure local read-only `Bash`: git log/status/diff/show/blame/branch/tag/remote (no network), ls, jq, head, tail, wc, cat, echo, test, find, grep; `LSP`; `Agent`; `mcp__sequentialthinking__*`, `mcp__context7__*`.
+
+4. **`GIT_SPECIAL_GROUP`** — git is treated exclusively. Do not fold git commands into generic remote/local rules. Analyze each git sub-command on its own merit and present them as a dedicated block in the report:
+
+   | Sub-command | Default suggestion | Rationale |
+   |---|---|---|
+   | `git log`, `git status`, `git diff`, `git show`, `git blame`, `git branch`, `git tag`, `git remote -v` | `allow` | Pure local read — no side effects |
+   | `git fetch` | `allow` | Downloads remote refs locally, no local branch changes; safe and essential for staying current |
+   | `git pull` | `allow` (with note) | Merges remote into local — safe in most workflows; note that it modifies working tree |
+   | `git stash`, `git stash pop` | `allow` | Local-only; fundamental workflow op, no remote contact |
+   | `git checkout`, `git switch` | `CONSIDER_ALLOW` | Modifies local state; see tradeoff below |
+   | `git merge`, `git rebase` | `CONSIDER_ALLOW` | Modifies local history; user should decide |
+   | `git add`, `git commit` | `ask` | Stages/records changes; user should confirm intent |
+   | `git push` | `ask` | Sends local commits to remote; always needs confirmation |
+   | `git push --force`, `git push -f` | `deny` | Irreversible remote history rewrite |
+   | `git reset --hard` | `ask` (or `deny`) | Discards local commits/changes; destructive |
+   | `git clean -f` | `ask` | Deletes untracked files |
+   | `git clone` | `ask` | Creates new local repo from remote; scope/target unclear without context |
+
+   When git commands appear in the log, group all of them into a `--- GIT OPERATIONS ---` block in the report. Show current placement (allow/ask/deny/unmatched) alongside the suggested placement. If a command is already in the right bucket, mark ⚪ and skip. Only surface gaps and misplacements.
+
+   **Important**: commands that start with `cd ... && git ...` do NOT match `Bash(git * ...)` rules — flag this bypass explicitly if seen in the log.
+
+5. **`CONSIDER_ALLOW` (high-frequency safe local op)** — special nuance for well-known ops:
+   Some local ops (e.g. `git checkout`, `git stash`, `git merge`, `git rebase`) modify local state but are fundamental daily-driver commands, extremely well-documented, and rarely harmful in isolation. If the log shows these used frequently across sessions, do NOT silently suggest `ask` — instead present a named tradeoff to the user:
+   ```
+   🔵 CONSIDER_ALLOW — high-frequency local op  [user ~/.claude/settings.json]
+   Pattern:   "Bash(git checkout *)"
+   Seen:      N times
+   Tradeoff:
+     🟢 Allowing avoids constant prompts; git checkout is safe in the vast majority of uses
+     🔴 Can overwrite uncommitted local changes if used carelessly (git checkout -- <file>)
+   Recommendation: Allow — but ensure deny rules exist for destructive variants
+   Action:    Add to allow[] ?  (ask user to decide)
+   ```
+   Let the user decide. Do not default to `ask` for these without surfacing the tradeoff.
+
+5. **`UNMATCHED`** (no clear category): flag with a recommendation (allow / ask / deny) and reasoning.
+
+6. **`OVERLY_PERMISSIVE`**: scan `allow[]` for rules that: (a) have no matching log entry in recent history AND (b) match patterns known to be dangerous (remote mutation, credential access, destructive exec, package management).
+
+**Remote operation detection heuristic** — classify a Bash command as "remote" if it:
+- Contains a URL, hostname, IP, or remote ref (e.g. `origin`, `upstream`)
+- Uses a CLI known to be network-bound by default: `curl`, `wget`, `git fetch/pull/push/clone`, `glab`, `gh`, `aws`, `kubectl`, `helm`, `terraform`, `ssh`, `scp`, `rsync --remote`, `docker pull/push`
+- Contains verbs: `fetch`, `pull`, `push`, `sync`, `deploy`, `publish`, `upload`, `download`, `clone`, `checkout` (when targeting a remote ref)
 
 ### Phase 4: Present and Apply
 
-Present suggestions grouped by severity: `MOVE_TO_DENY` first, then `MOVE_TO_ASK`, then `UNMATCHED`, then `ADD_TO_ALLOW`, then `OVERLY_PERMISSIVE`.
+Present suggestions in this order: `MOVE_TO_DENY` → `MOVE_TO_ASK` → `UNMATCHED` → `ADD_TO_ALLOW` → `CONSIDER_ALLOW` → `OVERLY_PERMISSIVE` → `--- GIT OPERATIONS (special group) ---`.
 
 **Output format:**
 

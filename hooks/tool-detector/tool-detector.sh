@@ -9,7 +9,15 @@ mkdir -p "$log_dir"
 log_file="$log_dir/log.jsonl"
 
 tool_name=$(echo "$json" | jq -r '.tool_name')
-command=$(echo "$json" | jq -r '.tool_input.command // .tool_input // empty')
+command=$(echo "$json" | jq -r '
+  .tool_name as $t |
+  if $t == "Bash" then .tool_input.command
+  elif ($t == "Edit" or $t == "Write") then .tool_input.file_path
+  elif $t == "Read" then .tool_input.file_path
+  elif $t == "Glob" then .tool_input.pattern
+  elif $t == "Grep" then .tool_input.pattern
+  else (.tool_input | keys | join(","))
+  end // empty')
 timestamp=$(date '+%Y-%m-%d %H:%M:%S')
 
 jq -cn \
