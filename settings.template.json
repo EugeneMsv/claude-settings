@@ -1,6 +1,28 @@
 {
+  "alwaysThinkingEnabled": true,
+  "attribution": {
+    "commit": "",
+    "pr": ""
+  },
+  "awsCredentialExport": "<command-to-export-aws-credentials>",
+  "enabledPlugins": {
+    "ai-herald@eug-msv-claude-marketplace": false,
+    "commit-commands@claude-plugins-official": true,
+    "jdtls-lsp@claude-plugins-official": true,
+    "kotlin-lsp@claude-plugins-official": true,
+    "plugin-dev@claude-plugins-official": true,
+    "pyright-lsp@claude-plugins-official": true
+  },
   "env": {
+    "ANTHROPIC_DEFAULT_HAIKU_MODEL": "arn:aws:bedrock:us-east-1:<your-aws-account-id>:inference-profile/global.anthropic.claude-haiku-4-5-20251001-v1:0",
+    "ANTHROPIC_DEFAULT_OPUS_MODEL": "arn:aws:bedrock:us-east-1:<your-aws-account-id>:inference-profile/global.anthropic.claude-opus-4-6-v1",
+    "ANTHROPIC_DEFAULT_SONNET_MODEL": "arn:aws:bedrock:us-east-1:<your-aws-account-id>:inference-profile/global.anthropic.claude-sonnet-4-6",
+    "ANTHROPIC_MODEL": "arn:aws:bedrock:us-east-1:<your-aws-account-id>:inference-profile/global.anthropic.claude-sonnet-4-6",
+    "AWS_PROFILE": "<your-aws-profile>",
+    "AWS_REGION": "us-east-1",
     "CLAUDE_CODE_ENABLE_TELEMETRY": "1",
+    "CLAUDE_CODE_SUBAGENT_MODEL": "arn:aws:bedrock:us-east-1:<your-aws-account-id>:inference-profile/global.anthropic.claude-sonnet-4-6",
+    "CLAUDE_CODE_USE_BEDROCK": "1",
     "DISABLE_BUG_COMMAND": "1",
     "DISABLE_ERROR_REPORTING": "1",
     "ENABLE_LSP_TOOL": "1",
@@ -10,9 +32,13 @@
     "OTEL_METRICS_EXPORTER": "otlp",
     "OTEL_METRIC_EXPORT_INTERVAL": "10000"
   },
-  "attribution": {
-    "commit": "",
-    "pr": ""
+  "extraKnownMarketplaces": {
+    "<your-marketplace-name>": {
+      "source": {
+        "path": "<path-to-your-local-marketplace>",
+        "source": "directory"
+      }
+    }
   },
   "permissions": {
     "allow": [
@@ -275,33 +301,16 @@
       }
     ]
   },
-  "statusLine": {
-    "type": "command",
-    "command": "bash ~/.claude/statusline.sh"
-  },
-  "enabledPlugins": {
-    "ai-herald@eug-msv-claude-marketplace": true,
-    "commit-commands@claude-plugins-official": true,
-    "jdtls-lsp@claude-plugins-official": true,
-    "kotlin-lsp@claude-plugins-official": true,
-    "plugin-dev@claude-plugins-official": true,
-    "pyright-lsp@claude-plugins-official": true,
-    "claude-code-guide@eug-msv-claude-marketplace": true
-  },
-  "extraKnownMarketplaces": {
-    "eug-msv-claude-marketplace": {
-      "source": {
-        "source": "directory",
-        "path": "/Users/Eugene_Moiseev/dev/prj/personal/eug-msv-claude-marketplace"
-      },
-      "autoUpdate": true
-    }
-  },
-  "alwaysThinkingEnabled": true,
+  "model": "sonnet",
   "effortLevel": "medium",
   "autoUpdatesChannel": "latest",
   "prefersReducedMotion": true,
   "autoDreamEnabled": true,
   "showTurnDuration": true,
+  "statusLine": {
+    "type": "command",
+    "command": "bash ~/.claude/statusline.sh",
+    "padding": 0
+  },
   "teamMateMode": "tmux"
 }
