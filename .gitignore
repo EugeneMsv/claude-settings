@@ -28,4 +28,3 @@ ai-herald/history
 
 # Exclude specific sensitive files
 CLAUDE.md
-settings.json
