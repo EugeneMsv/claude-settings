@@ -72,6 +72,7 @@ Examples where LSP MUST be used instead of Grep/Glob:
 
 ### General
 - Use `python3` — `python` command not available on macOS
+- `claude mcp add` requires positional args in order: `claude mcp add <name> <commandOrUrl> [flags]` — flags like --transport must follow both
 
 ## Edit
 - Re-read file before retrying when Edit fails with "File has been unexpectedly modified"
