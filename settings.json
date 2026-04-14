@@ -8,7 +8,8 @@
     "OTEL_EXPORTER_OTLP_PROTOCOL": "grpc",
     "OTEL_LOGS_EXPORT_INTERVAL": "5000",
     "OTEL_METRICS_EXPORTER": "otlp",
-    "OTEL_METRIC_EXPORT_INTERVAL": "10000"
+    "OTEL_METRIC_EXPORT_INTERVAL": "10000",
+    "CLAUDE_CODE_NO_FLICKER": "1"
   },
   "attribution": {
     "commit": "",
@@ -220,6 +221,7 @@
     "ai-herald@eug-msv-claude-marketplace": true,
     "commit-commands@claude-plugins-official": true,
     "jdtls-lsp@claude-plugins-official": true,
+
     "kotlin-lsp@claude-plugins-official": true,
     "plugin-dev@claude-plugins-official": true,
     "pyright-lsp@claude-plugins-official": true,

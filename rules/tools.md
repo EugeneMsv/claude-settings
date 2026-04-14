@@ -92,3 +92,4 @@ Examples where LSP MUST be used instead of Grep/Glob:
 
 ## WebFetch
 - Don't guess raw file paths in GitLab repos — use glab or Glob to confirm file exists before constructing a raw URL
+- On 403 or 404, switch to WebSearch to find the correct accessible URL — don't retry WebFetch on the same guessed URL
