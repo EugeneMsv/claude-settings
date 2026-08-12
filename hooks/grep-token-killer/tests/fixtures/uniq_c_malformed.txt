@@ -1,0 +1,3 @@
+      3 /Users/x/src/main/java/com/acme/A.java:12:import com.acme.Thing;
+      1 /Users/x/src/main/java/com/acme/B.java:30:import com.acme.Thing;
+      7 /Users/x/src/main/java/com/acme/C.java:5:import com.acme.Thing;

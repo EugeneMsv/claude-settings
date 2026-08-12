@@ -1,8 +1,7 @@
 # Git Workflow
 Always MUST:
 - Use Bash for Git operations and verification
-- Always start with: checkout main, pull latest, then create feature branch.
-- ALWAYS create a feature branch BEFORE making any file edits. Never edit files on main/master.
+- Start every task: checkout main, pull latest, create a feature branch BEFORE any file edits. Never edit on main/master.
 - Run project code formatting/linting before each `git add` command
 - Run ALL tests (full suite, not just feature-specific) before `git add` — NEVER commit before tests pass
 - One commit per task
@@ -23,7 +22,7 @@ After pushing a branch:
 3. Update title if needed: `glab mr update <id> --title "PROJ-XXXXX: <description>"`
 
 ## Local Infrastructure
-When local dev infrastructure or UAT tests are requested, start everything autonomously — refer to project CLAUDE.md to understand how to start the local stack and app.
+Start the stack autonomously using project CLAUDE.md steps. Non-destructive start/build/run only; stop and ask when a required choice is ambiguous (port, profile, missing config) or a step is destructive (data wipe, port-kill, container prune).
 
 ## Glab MR Review workflow
 When user asks to review MR comments:

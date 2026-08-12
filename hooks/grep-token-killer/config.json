@@ -1,0 +1,6 @@
+{
+  "mode": "active",
+  "line_max_output_chars": 500,
+  "min_lines": 3,
+  "min_saving_pct": 10.0
+}

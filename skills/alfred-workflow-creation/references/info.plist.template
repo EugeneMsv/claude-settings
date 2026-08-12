@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!--
+  Alfred Script Filter -> Open URL template.
+  Replace: bundleid, name, keyword, script filename, subtext/title.
+  CRITICAL:
+    config.type = 0 (bash) or 8 (python3) ONLY  (a bad value drops the keyword)
+    config.script uses an ABSOLUTE interpreter path (/usr/bin/python3) - Alfred's PATH is minimal
+    set EITHER script (scriptfile empty) OR scriptfile (script empty), never both
+  Validate with: plutil -lint info.plist  (must print OK)
+-->
+<plist version="1.0">
+<dict>
+	<key>bundleid</key>
+	<string>com.example.my-workflow</string>
+	<key>connections</key>
+	<dict>
+		<key>SCRIPTFILTER-UID</key>
+		<array>
+			<dict>
+				<key>destinationuid</key>
+				<string>OPENURL-UID</string>
+				<key>modifiers</key>
+				<integer>0</integer>
+				<key>modifiersubtext</key>
+				<string></string>
+				<key>vitoclose</key>
+				<false/>
+			</dict>
+		</array>
+	</dict>
+	<key>createdby</key>
+	<string>Your Name</string>
+	<key>description</key>
+	<string>Open saved queries in browser</string>
+	<key>disabled</key>
+	<false/>
+	<key>name</key>
+	<string>My Workflow</string>
+	<key>objects</key>
+	<array>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>argumenttype</key>
+				<integer>1</integer>
+				<key>escaping</key>
+				<integer>0</integer>
+				<key>keyword</key>
+				<string>mykw</string>
+				<key>runningsubtext</key>
+				<string>Loading…</string>
+				<key>script</key>
+				<string>/usr/bin/python3 scriptfilter.py</string>
+				<key>scriptargtype</key>
+				<integer>0</integer>
+				<key>scriptfile</key>
+				<string></string>
+				<key>subtext</key>
+				<string>Choose an option to open</string>
+				<key>title</key>
+				<string>My Workflow</string>
+				<key>type</key>
+				<integer>0</integer>
+				<key>withspace</key>
+				<false/>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.input.scriptfilter</string>
+			<key>uid</key>
+			<string>SCRIPTFILTER-UID</string>
+			<key>version</key>
+			<integer>3</integer>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>browser</key>
+				<string></string>
+				<key>url</key>
+				<string>{query}</string>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.action.openurl</string>
+			<key>uid</key>
+			<string>OPENURL-UID</string>
+			<key>version</key>
+			<integer>1</integer>
+		</dict>
+	</array>
+	<key>readme</key>
+	<string>Type the keyword, select an option, press Enter to open in the default browser.</string>
+	<key>uidata</key>
+	<dict>
+		<key>SCRIPTFILTER-UID</key>
+		<dict>
+			<key>xpos</key>
+			<real>150</real>
+			<key>ypos</key>
+			<real>150</real>
+		</dict>
+		<key>OPENURL-UID</key>
+		<dict>
+			<key>xpos</key>
+			<real>450</real>
+			<key>ypos</key>
+			<real>150</real>
+		</dict>
+	</dict>
+	<key>version</key>
+	<string>1.0</string>
+	<key>webaddress</key>
+	<string></string>
+</dict>
+</plist>

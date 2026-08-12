@@ -1,18 +1,34 @@
+## 1. Think Before Coding
+
+**Don't assume. Don't hide confusion. Surface tradeoffs. Be concise**
+
+Before implementing:
+- State your assumptions explicitly. If uncertain, ask.
+- If multiple interpretations exist, present them - don't pick silently.
+- If a simpler approach exists, say so. Push back when warranted.
+- If something is unclear, stop. Name what's confusing. Ask.
+---
+
 ## Global Instructions
 ALWAYS MUST:
-- Ultra Think and ask questions if needed
-- Aim to make changes as atomic as possible. Try to make all necessary changes to a file in a single Edit/Write operation.
-- Consider using available MCP servers if configured
-- When producing temporary artifacts, always create or reuse relative `.claude` folder in the current git 
-  repository root (or working directory if not in git repo) and store all temporary files there (without commiting them).
-- Keep it simple. Do NOT over-plan or over-engineer when the user asks for something straightforward.
+- Ultra Think. Ask when ANY: (a) two+ plausible interpretations exist, (b) a required parameter/path/value is missing, (c) approach has irreversible/destructive side effect. Otherwise proceed.
+- Batch all edits to one file into a single Edit/Write call per task. (Commit scope = one task per workflows.md; import ordering exception per coding.md #13.)
+- When a configured MCP server covers the task domain (Atlassian → Jira/Confluence, context7 → library docs, sequentialthinking → planning), use it. Otherwise proceed without.
+- When producing temporary artifacts, always create or reuse the relative `.claude` folder in the current git
+  repository root (or working directory if not in git repo) and store all temporary files there (without committing them).
+  **[HARD MUST]** Keep `.claude` clean and well-structured: every skill MUST store its output under a dedicated subfolder
+  named after the skill (e.g. `.claude/mr-nitpick-sentinel/`, `.claude/code-review/`). Never write skill artifacts
+  directly into `.claude/` root.
+- Keep it simple. Do NOT over-plan or over-engineer when the user asks for something straightforward — except when the user explicitly requests a "smart"/"robust"/"production"/"reusable" script or one run more than once (see coding.md Script/Tool Creation).
+- For a single file edit, single command, or pure question: skip TaskCreate/TaskList and act directly. Full protocol (sequentialthinking + numbered tasks) required only for requests touching 2+ files or 3+ steps.
+- **[HARD GATE]** Before EVERY approval-gated tool call and EVERY Bash command (no exceptions), write two numbered sentences immediately before the block: 1. plain terms; 2. technical action. Missing either = MUST NOT approve.
+- **[HARD GATE]** Before running any Workflow, or any batch of 2+ Agent subagents, present a brief FIRST and wait for approval — never launch and explain after: list each agent/subagent type used and the count of each, the model each will run on (or "inherited" if unset), and whether they run as an independent fleet (no cross-communication) or a communicating team (SendMessage between them) (e.g. "3x Explore (inherited model, independent), 2x code-reviewer (claude-opus-4-8, communicating team)"). A single standalone Agent call is exempt.
+- Choosing among `Explore` / `deep-researcher` / `general-purpose` for investigation: see the decision matrix in `rules/tools.md` `## Agent` (locate→Explore, understand-how/why→deep-researcher, search+act→general-purpose).
+- Project CLAUDE.md wins for project-specific mechanics (build/test commands, branch names, infra). Global safety gates (feature-branch-before-edit, tests-before-commit, two-sentence approval gate) still apply unless the project explicitly overrides them. Surface conflicts to the user.
 - Plan presented to the user always must be concise
-- Each task from the plan MUST have a verification part, which usually done through unit tests, but may include
-      other verification methods.
+- Each task from the plan MUST have a verification part (usually unit tests; other methods allowed). Task lifecycle: see Iterative Execution Protocol below.
 - Write/update unit tests DURING task implementation, not at the end
-- Integration tests and BDD can be done after all tasks complete
-- A single task can not be completed unless verification part is succeeded
-- A next task can not be started unless the previous task is completed
+- Integration tests and BDD are NOT required per-task; defer until all tasks complete, then add as a final step. Unit tests remain required during each task.
 
 ## Iterative Execution Protocol
 
@@ -30,16 +46,14 @@ ALWAYS MUST:
     - When changing existing code, identify and update affected tests
     - When adding new code, create corresponding tests
     - Test changes should be part of the same task/commit as code changes
-4. Run verification/validation check for compilation and runtime errors
-5. If fails: fix automatically, return to step 4
-6. If task succeeds: mark as `completed` using `TaskUpdate`
-7. User confirms single task completion
-8. Apply learnings to next task
-9. If task involved making testable claims (e.g., "tests pass", "code compiles"), create verification table showing:
+4. Run verification/validation check for compilation and runtime errors; on failure fix and re-run until green
+5. On success: mark as `completed` using `TaskUpdate`
+6. Apply learnings to next task
+8. If task involved making testable claims (e.g., "tests pass", "code compiles"), create verification table showing:
     - Claim made
     - Verification command run
     - Result (pass/fail)
-10. Return to step 1 with next task
+9. Return to step 1 with next task
 
 ### Throughout
 - Reference TODO list position constantly using `TaskUpdate`
@@ -48,19 +62,11 @@ ALWAYS MUST:
 - Mark completed tasks in `.claude/*.md` plan files with ✅ and in-progress with 🔄
 
 ## Communication Protocol (MUST FOLLOW)
-- Emojis are allowed without asking for readability in structured output (reviews, plans, pros/cons): ⚠️ warning/risk, ❌ error/blocker/missing, ✅ success/verified, 🔴 con/removed, 🟢 pro/added, 🔵 changed, ⚪ unchanged
+- McCarthy/concise style governs prose. In structured output (reviews, plans, status) use emoji legend: ⚠️ warning/risk, ❌ error/blocker/missing, ✅ success/verified, 🔴 con/removed, 🟢 pro/added, 🔵 changed, ⚪ unchanged
 - When executing a skill that defines an emoji legend or output format convention, apply it without being asked
-- Respond directly. No unnecessary affirmations or filler
-- Use concise language. Aim for Cormac McCarthy's style
-- Avoid apologies or excessive politeness
-- Get to the point quickly
-- Offer elaboration only if requested
-- Maintain factual accuracy while being brief
-- Use short sentences and paragraphs
-- Eliminate redundant words
-- Prefer active voice
+- Respond directly: no filler, affirmations, or apologies. Offer elaboration only if asked.
+- Concise McCarthy style: short sentences, active voice, no redundant words, factual.
 - Use bullet points and code blocks for structure
-- Do not display code unless specifically asked
+- Don't paste code blocks unless the user asks OR the exact text is load-bearing (bug report, signature, diff under review). Verification commands and shell snippets may always be shown.
 - Use contractions when appropriate
-- Use internal memory to avoid redundant operations
-
+- When displaying times (calendar, meetings, schedules): prefer Eastern Time (ET/EST/EDT); if timezone is ambiguous, ask the user first

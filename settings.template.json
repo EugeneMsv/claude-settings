@@ -309,7 +309,7 @@
   "showTurnDuration": true,
   "statusLine": {
     "type": "command",
-    "command": "bash ~/.claude/statusline.sh",
+    "command": "bash ~/.claude/statusline/statusline.sh",
     "padding": 0
   },
   "teamMateMode": "tmux"
