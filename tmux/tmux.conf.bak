@@ -16,3 +16,26 @@ set -g allow-passthrough on
 
 # M-q f — toggle git changed-files tree in a right split pane (35% width)
 bind-key f run-shell "~/.claude/tmux/tmux-toggle-git-tree.sh"
+
+# === Feature: background window attention alerts (Claude-state-driven) ===
+# Claude hooks call ~/.claude/tmux/tmux-claude-alert.sh, setting per-window
+# option @claude_alert: "done" (Stop) or "input" (Notification). Color below.
+set -g monitor-bell on                                      # allow audible bell from the hook
+set -g window-status-bell-style "default"                   # no reverse-video; color via @claude_alert
+set -g visual-bell off                                      # no popup message
+set -g focus-events on                                      # needed so pane-focus-in fires
+# green = Claude finished (done), orange = Claude needs input
+set -g window-status-format "#{?#{==:#{@claude_alert},done},#[fg=colour114]#[bold],#{?#{==:#{@claude_alert},input},#[fg=colour214]#[bold],}} #I:#W#F #[default]"
+set -g window-status-current-format " #I:#W#F "
+# clear the alert color when you switch to that window (n/p/l route through select-window)
+set-hook -g after-select-window 'set -uw @claude_alert'     # M-q 0-9 / n / p / l
+set-hook -g pane-focus-in 'set -uw @claude_alert'           # mouse / terminal focus
+# aggregate counter on the right of the window-list line: how many windows are flagged
+set -g status-interval 5                                    # refresh counter (and git info) every 5s
+set -g status-right "#(~/.claude/tmux/tmux-alert-count.sh #{session_name})"  # green=done, orange=input
+
+# === Feature: macOS clipboard + mouse ===
+set -g mouse on                                             # click pane, drag-select, scroll
+setw -g mode-keys vi                                        # vi keys in copy-mode
+bind-key -T copy-mode-vi y send -X copy-pipe-and-cancel "pbcopy"                  # y -> Mac clipboard
+bind-key -T copy-mode-vi MouseDragEnd1Pane send -X copy-pipe-and-cancel "pbcopy"  # mouse drag -> clipboard

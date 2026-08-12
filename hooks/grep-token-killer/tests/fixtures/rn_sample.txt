@@ -1,0 +1,20 @@
+/srv/app/src/main/java/com/example/orders/handler/OrderBuilder.java:50:public class OrderBuilder implements RequestBuilder {
+/srv/app/src/main/java/com/example/orders/handler/OrderBuilder.java:52:  private static final Logger LOGGER = LoggerFactory.getLogger(OrderBuilder.class);
+/srv/app/src/main/java/com/example/orders/handler/OrderBuilder.java:355:        .resolve(NAMESPACE_MAIN, Definition.CUSTOM_PARAMS_PROPERTY, String.class)
+/srv/app/src/main/java/com/example/orders/handler/OrderBuilder.java:402:        .resolve(Definition.VIDEO_UNSUPPORTED_FLAG, String.class)
+/srv/app/src/main/java/com/example/orders/handler/OrderModule.java:46:public class OrderModule extends BaseModule implements ModuleInterface<Context, ReturnCode> {
+/srv/app/src/main/java/com/example/orders/handler/OrderModule.java:62:      synchronized (OrderModule.class) {
+/srv/app/src/main/java/com/example/orders/handler/OrderModule.java:240:        .resolve(NAMESPACE_MAIN, Definition.TRANSPARENCY_ENABLED, Boolean.class)
+/srv/app/src/main/java/com/example/orders/handler/OrderModule.java:250:        .resolve(NAMESPACE_MAIN, Definition.SOURCE_TRACKING_WHITELIST, Set.class)
+/srv/app/src/main/java/com/example/orders/handler/CacheModule.java:26:public class CacheModule extends BaseModule
+/srv/app/src/main/java/com/example/orders/handler/CacheModule.java:31:  private static Logger LOGGER = LoggerFactory.getLogger(CacheModule.class);
+/srv/app/src/main/java/com/example/orders/handler/CacheModule.java:43:      synchronized (CacheModule.class) {
+/srv/app/src/main/java/com/example/orders/handler/PartnerModule.java:39:public class PartnerModule extends BaseModule
+/srv/app/src/main/java/com/example/orders/handler/PartnerModule.java:41:  public static final String MODULE_NAME = PartnerModule.class.getSimpleName();
+/srv/app/src/main/java/com/example/orders/handler/PartnerModule.java:56:      synchronized (PartnerModule.class) {
+/srv/app/src/main/java/com/example/orders/handler/OrderUtil.java:100: * Order generation util class.
+/srv/app/src/main/java/com/example/orders/handler/OrderUtil.java:102:public class OrderUtil {
+/srv/app/src/main/java/com/example/orders/handler/OrderUtil.java:103:  private static final Logger LOGGER = LoggerFactory.getLogger(OrderUtil.class);
+/srv/app/src/main/java/com/example/orders/handler/OrderUtil.java:674:        .resolve(OPT_IN_REQUIRED_STATES, Set.class)
+/srv/app/src/main/java/com/example/orders/handler/OrderUtil.java:681:        .resolve(OPT_IN_REQUIRED_COUNTRIES, Set.class)
+/srv/app/src/main/java/com/example/orders/handler/OrderUtil.java:708:        .resolve(OPT_OUT_SKIPPED, Boolean.class)

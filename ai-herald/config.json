@@ -2,7 +2,6 @@
   "enabled": true,
   "base_branches": [
     "main",
-    "epam-main",
     "github-main",
     "master",
     "develop"

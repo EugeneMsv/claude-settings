@@ -15,16 +15,21 @@ ai-contribution-tracker/history
 !/ai-herald
 !/ai-herald/config.json
 ai-herald/history
+!/statusline
+statusline/cache
 
 # Except these root-level files
 !/*.md
-!/settings.local.json
 !/settings.template.json
+!/settings.template.v2.json
 !/tmux-git-diff.sh
 !/tmux-git-status.sh
 
-# Except root dotfiles
-!/.mcp.json
-
 # Exclude specific sensitive files
 CLAUDE.md
+settings.json
+
+# Never track .env files anywhere in this repo (secrets), even inside
+# directories re-included above (e.g. skills/) — must come after the
+# negations since gitignore evaluates patterns in file order.
+**/.env
